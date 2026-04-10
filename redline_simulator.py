@@ -1,36 +1,30 @@
 import streamlit as st
-from datetime import datetime
+import time
 
+st.set_page_config(page_title="RedLINE Simulator", layout="centered")
 st.title("🔴🟠🟢 RedLINE — Upstream Timing Deviation Detector")
 st.markdown("**Environmental Boundary and Timing Deviation Detection System** (Provisional Patent Pending)")
 
-st.subheader("Paste your timestamps (one per line)")
+st.subheader("Watch how RedLINE detects timing shifts upstream")
 
-timestamps = st.text_area("Timestamps", height=250, 
-    value="2026-04-09 10:00:00\n2026-04-09 10:05:00\n2026-04-09 10:10:00\n2026-04-09 10:15:00\n2026-04-09 10:20:00\n2026-04-09 10:30:00\n2026-04-09 10:45:00\n2026-04-09 11:05:00\n2026-04-09 11:30:00\n2026-04-09 12:00:00")
+if st.button("🚀 Start RedLINE Demo", type="primary"):
+    with st.spinner("Running demo..."):
+        # Simulate the exact sequence from your video
+        st.subheader("Timing View")
+        
+        # Step 1: Stable
+        st.success("🟢 **Stable** — Cadence is stable.\nThe spacing is consistent. Nothing looks wrong yet.")
+        time.sleep(1.5)
+        
+        # Step 2: Shifting begins
+        st.warning("🟠 **Shifting** — The spacing is beginning to stretch.\nThis is the early shift. The visible event still has not happened.")
+        time.sleep(1.5)
+        
+        # Step 3: Drift forming
+        st.error("🔴 **Drift forming** — Drift is forming before visible failure.\nThis is the upstream window RedLINE is built to reveal.")
+        
+        st.success("✅ **Demo Complete**\n\nTiming shifts appear **upstream**. Visible problems show up downstream.\nThat early spacing change is the signal RedLINE detects.")
+        
+        st.info("I'm not claiming a finished system here. I'm showing that timing changes can be seen before anything looks visibly wrong.")
 
-if st.button("🚀 Run RedLINE Demo", type="primary"):
-    lines = [line.strip() for line in timestamps.split("\n") if line.strip()]
-    if len(lines) < 3:
-        st.error("Please enter at least 3 timestamps")
-    else:
-        try:
-            times = [datetime.fromisoformat(line) for line in lines]
-            gaps = [(times[i+1] - times[i]).total_seconds() / 60 for i in range(len(times)-1)]
-            
-            st.subheader("RedLINE Analysis")
-            
-            baseline = sum(gaps[:3]) / 3
-            
-            for i, gap in enumerate(gaps):
-                if gap <= baseline * 1.25:
-                    st.success(f"🟢 Stable — Gap {gap:.1f} min")
-                elif gap <= baseline * 2.0:
-                    st.warning(f"🟠 Shifting — Gap {gap:.1f} min  ← Early signal")
-                else:
-                    st.error(f"🔴 Drifting — Gap {gap:.1f} min  ← Upstream deviation detected")
-            
-            st.info("Timing shifts appear **upstream**. This is the window RedLINE is built to reveal.")
-            
-        except:
-            st.error("Make sure timestamps are in YYYY-MM-DD HH:MM:SS format")
+st.caption("RedLINE — Provisional Patent Pending • March 11, 2026")
