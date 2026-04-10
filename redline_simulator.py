@@ -9,8 +9,7 @@ st.markdown("**Environmental Boundary and Timing Deviation Detection System** (P
 
 st.subheader("Watch the dots move + timestamps stretch in real time")
 
-html_demo = """
-<!DOCTYPE html>
+html_demo = """<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -68,58 +67,4 @@ html_demo = """
 </div>
 
 <script>
-const dots = [document.getElementById('d1'),document.getElementById('d2'),document.getElementById('d3'),document.getElementById('d4'),
-              document.getElementById('d5'),document.getElementById('d6'),document.getElementById('d7'),document.getElementById('d8')];
-
-const ts = [document.getElementById('t1'),document.getElementById('t2'),document.getElementById('t3'),document.getElementById('t4'),
-            document.getElementById('t5'),document.getElementById('t6'),document.getElementById('t7'),document.getElementById('t8')];
-
-const msg = document.getElementById('message');
-
-let baseTime = new Date(2026, 3, 9, 10, 0, 0); // April 9, 2026 10:00:00
-
-function formatTime(date) {
-  return date.getHours().toString().padStart(2,'0') + ':' + 
-         date.getMinutes().toString().padStart(2,'0');
-}
-
-function runDemo() {
-  // Reset
-  dots.forEach(d => { d.className = 'dot'; });
-  msg.textContent = 'Simulation starting...';
-
-  let step = 0;
-  let currentTime = new Date(baseTime.getTime());
-
-  const messages = [
-    "🟢 Cadence is stable. Spacing is consistent.",
-    "🟢 Cadence is stable. Spacing is consistent.",
-    "🟠 The spacing is beginning to stretch.",
-    "🟠 Early shift detected — visible event still ahead.",
-    "🟠 Shifting phase active.",
-    "🔴 Drift is forming before visible failure.",
-    "🔴 Upstream deviation detected.",
-    "🔴 This is the window RedLINE reveals."
-  ];
-
-  const interval = setInterval(() => {
-    if (step < dots.length) {
-      dots[step].classList.add('active');
-      if (step >= 2) dots[step].classList.add('shifting');
-      if (step >= 5) dots[step].classList.add('drifting');
-
-      // Update timestamp (gaps increase)
-      if (step > 0) {
-        let gapMinutes = 5;
-        if (step >= 5) gapMinutes = 8;
-        if (step >= 6) gapMinutes = 11;
-        if (step >= 7) gapMinutes = 15;
-        currentTime = new Date(currentTime.getTime() + gapMinutes * 60000);
-      }
-      ts[step].textContent = formatTime(currentTime);
-
-      msg.textContent = messages[Math.min(step, messages.length-1)];
-      step++;
-    } else {
-      clearInterval(interval);
-      msg.innerHTML = '<strong>Demo complete.</strong><br>Timing shifts appeared <strong>upstream</
+const dots = [document.getElementById('d1'),document.getElementById('d2'),document.getElementById('d
